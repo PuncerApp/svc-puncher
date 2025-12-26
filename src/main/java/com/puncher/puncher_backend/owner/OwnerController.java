@@ -3,7 +3,7 @@ package com.puncher.puncher_backend.owner;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@RestController
+@RestController("adminOwnerController")
 @RequestMapping("/api/owners")
 @CrossOrigin("*")
 public class OwnerController {
