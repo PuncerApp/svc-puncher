@@ -11,12 +11,12 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private static final String SECRET =
-            "puncher-secret-key-puncher-secret-key-123456"; // min 32 chars
+    private static final String SECRET = "puncher-secret-key-puncher-secret-key";
+    private static final long EXPIRATION = 1000 * 60 * 60 * 10;
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
-
-    private final long EXPIRATION = 1000 * 60 * 60 * 10; // 10 hours
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
+    }
 
     public String generateToken(String username, String role) {
         return Jwts.builder()
@@ -24,15 +24,19 @@ public class JwtUtil {
                 .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(key)
+                .signWith(getSigningKey())
                 .compact();
     }
 
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public String extractUsername(String token) {
+        return extractClaims(token).getSubject();
     }
 }
