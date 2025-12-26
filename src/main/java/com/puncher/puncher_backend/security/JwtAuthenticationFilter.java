@@ -1,5 +1,6 @@
 package com.puncher.puncher_backend.security;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,17 +36,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = header.substring(7);
 
             try {
-                String username = jwtUtil.extractUsername(token);
-                String role = jwtUtil.extractClaims(token).get("role", String.class);
+                Claims claims = jwtUtil.extractClaims(token);
+                String username = claims.getSubject();
+                String role = claims.get("role", String.class);
 
-                UsernamePasswordAuthenticationToken auth =
+                var authorities =
+                        List.of(new SimpleGrantedAuthority("ROLE_" + role));
+
+                var authToken =
                         new UsernamePasswordAuthenticationToken(
                                 username,
                                 null,
-                                List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                                authorities
                         );
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                SecurityContextHolder
+                        .getContext()
+                        .setAuthentication(authToken);
 
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
