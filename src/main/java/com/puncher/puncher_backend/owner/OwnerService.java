@@ -13,8 +13,9 @@ public class OwnerService {
         this.repo = repo;
     }
 
+    // ✅ NEW OWNER → ALWAYS PENDING
     public Owner register(Owner owner) {
-        owner.setStatus("PENDING");
+        owner.setStatus(OwnerStatus.PENDING);
         return repo.save(owner);
     }
 
@@ -26,14 +27,12 @@ public class OwnerService {
         return repo.findAll();
     }
 
-    public Owner updateStatus(Long id, String status) {
-        Owner owner = repo.findById(id).orElseThrow();
+    // ✅ ADMIN UPDATE STATUS
+    public Owner updateStatus(Long id, OwnerStatus status) {
+        Owner owner = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Owner not found"));
         owner.setStatus(status);
         return repo.save(owner);
-    }
-
-    public Owner getById(Long id) {
-        return repo.findById(id).orElseThrow();
     }
 
     public Owner getOwnerById(Long id) {

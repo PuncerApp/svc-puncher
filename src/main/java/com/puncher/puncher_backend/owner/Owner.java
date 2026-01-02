@@ -24,19 +24,11 @@ public class Owner {
     private Boolean tubeless;
     private Boolean air;
 
-    private String status; // PENDING / APPROVED / REJECTED
+    @Enumerated(EnumType.STRING)
+    private OwnerStatus status;   // ✅ ONLY THIS
 
-    // ✅ GETTERS & SETTERS
+    // ===== GETTERS / SETTERS =====
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    // (optional but recommended)
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -48,4 +40,7 @@ public class Owner {
 
     public String getMobile() { return mobile; }
     public void setMobile(String mobile) { this.mobile = mobile; }
+
+    public OwnerStatus getStatus() { return status; }
+    public void setStatus(OwnerStatus status) { this.status = status; }
 }
