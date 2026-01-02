@@ -49,4 +49,12 @@ public class OwnerService {
         return repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Owner not found"));
     }
+
+    // ✅ ADMIN DELETE OWNER
+    public void deleteOwner(Long id) {
+        if (!repo.existsById(id)) {
+            throw new RuntimeException("Owner not found");
+        }
+        repo.deleteById(id);
+    }
 }

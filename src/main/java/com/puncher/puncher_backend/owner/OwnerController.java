@@ -1,6 +1,7 @@
 package com.puncher.puncher_backend.owner;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -53,5 +54,12 @@ public class OwnerController {
     public Owner updateStatus(@PathVariable Long id,
                               @PathVariable OwnerStatus status) {
         return service.updateStatus(id, status);
+    }
+
+    // 🔐 ADMIN - DELETE OWNER
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteOwner(@PathVariable Long id) {
+        service.deleteOwner(id);
+        return ResponseEntity.ok("Owner deleted successfully");
     }
 }
