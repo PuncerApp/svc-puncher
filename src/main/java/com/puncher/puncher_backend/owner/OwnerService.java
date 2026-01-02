@@ -15,7 +15,17 @@ public class OwnerService {
 
     // ✅ NEW OWNER → ALWAYS PENDING
     public Owner register(Owner owner) {
+
+        // always pending
         owner.setStatus(OwnerStatus.PENDING);
+
+        // if mechanic shop → no puncture options
+        if (owner.getShopType() == ShopType.MECHANIC) {
+            owner.setTube(false);
+            owner.setTubeless(false);
+            owner.setAir(false);
+        }
+
         return repo.save(owner);
     }
 
